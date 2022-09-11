@@ -148,7 +148,7 @@ def CoffeMachine(MENU, resources):
                 evaluation = is_enough_money(MENU[coffee_type]['cost'], payment)
                 if evaluation:
                     resources = sources_update(coffee_type, resources)
-                    print(f"Here is your {coffee_type}. Enjoy!")
+                    print(f"Here is your  ☕{coffee_type}. Enjoy!")
 
         coffee_type = input("What would you like? (espresso, latte, cappuccino): ").strip().lower()
         turn_on = machine_power(turn_on, coffee_type)
