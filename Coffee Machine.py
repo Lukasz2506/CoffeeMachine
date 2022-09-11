@@ -8,36 +8,18 @@ def is_enough_sources(coffee_type):
     '''Check is the sources level in the Coffee Machine are enough
        to make your coffee (coffee_type: espresso, latte, cappuccino)'''
     if resources["water"] <= MENU[coffee_type]["ingredients"]["water"]:
-        if resources["coffee"] <= MENU[coffee_type]["ingredients"]["coffee"]:
-            if resources["milk"] <= MENU[coffee_type]["ingredients"]["milk"]:
-                return False
-                print("Sorry there is not enough water, coffe, and milk.")
-            print("Sorry there is not enough water and coffe.")
-            return False
         print("Sorry there is not enough water.")
         return False
-
     elif resources["coffee"] <= MENU[coffee_type]["ingredients"]["coffee"]:
-        if resources["water"] <= MENU[coffee_type]["ingredients"]["water"]:
-            if resources["milk"] <= MENU[coffee_type]["ingredients"]["milk"]:
-                print("Sorry there is not enough water, coffe, and milk.")
-                return False
-            print("Sorry there is not enough water and coffe.")
-            return False
-        print("Sorry there is not enough coffe.")
+        print("Sorry there is not enough water and coffee.")
         return False
-
     elif resources["milk"] <= MENU[coffee_type]["ingredients"]["milk"]:
-        if resources["water"] <= MENU[coffee_type]["ingredients"]["water"]:
-            if resources["coffee"] <= MENU[coffee_type]["ingredients"]["coffee"]:
-                print("Sorry there is not enough water, coffee, and milk.")
-                return False
-            print("Sorry there is not enough water and coffe.")
-            return False
         print("Sorry there is not enough milk.")
         return False
     else:
         return True
+
+
 
 
 MENU = {
@@ -84,8 +66,11 @@ def report():
     '''Print report for all resources Coffee Machine
        currently has.'''
     for key in resources:
-        print(f"{key}: {resources[key]},")
-
+        if key == 'coffee':
+            print(f"{key}: {resources[key]}g,")
+        else:
+            print(f"{key}: {resources[key]}ml,")
+    print(f"Money: ${profit}")
 
 # TODO: 5. Process coins (after sources check), calculate the money.
 
@@ -111,13 +96,13 @@ def coins_process():
 # TODO: 6. Check is enough money to prepare the coffe. Actualise sources if coffe will be proceeded.
 
 def is_enough_money(coffee_cost, money_sum):
-    """Compare is the coffe price lower then money you putted
-       into the coffe machine."""
-    if coffee_cost == money_sum:
-        return True
-    elif coffee_cost < money_sum:
-        difference = money_sum - coffee_cost
-        print(f"Here is ${difference} dollars in change.")
+    """Compare is the coffee price lower then money you putted
+       into the coffee machine."""
+    change = money_sum - coffee_cost
+    if coffee_cost <= money_sum:
+        global profit
+        profit += coffee_cost
+        print(f"Here is ${change} dollars in change.")
         return True
     else:
         print("Sorry that's not enough money. Money refunded.")
@@ -152,12 +137,11 @@ def CoffeMachine(MENU, resources):
 
     while turn_on:
 
-
         if coffee_type == "report":
             report()
         else:
             enough_sources = is_enough_sources(coffee_type)
-            if enough_sources == True:
+            if enough_sources:
                 payment = coins_process()
                 print(payment)
                 print(coffee_type)
